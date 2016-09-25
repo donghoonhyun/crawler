@@ -122,8 +122,8 @@ def save_url(targetid, urls):
     try:
         for url in urls:
             # Prepare SQL query to INSERT a record into the database
-            sql = "INSERT INTO url (targetID, url) \
-                    VALUES (%s, %s)" % \
+            sql = "INSERT INTO url (targetID, url, collectDate) \
+                    VALUES (%s, %s, curdate()+0)" % \
                   ("'"+str(targetid)+"'", "'"+url+"'")
 
             # Execute the SQL command
