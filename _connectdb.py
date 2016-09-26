@@ -195,9 +195,10 @@ def save_word(targetid, url, df):
         if str(sqle)[1:5] == '1062':  # Duplicate entry
             # Rollback in case there is any error
             db.rollback()
+            print(df)
 
             # Prepare SQL query to INSERT a record into the database
-            sql = "UPDATE document set isAnalysed = 'E' \
+            sql = "UPDATE document set isAnalysed = 'E',  analyseDate = curdate()+0  \
                         WHERE targetID = %s AND url = %s " % \
                   ("'" + str(targetid) + "'", "'" + url + "'")
             # Execute the SQL command
@@ -276,7 +277,7 @@ def mark_document(targetid, url):
     cursor = db.cursor()
 
     # Prepare SQL query to INSERT a record into the database
-    sql = "UPDATE document set isAnalysed = 'Y' \
+    sql = "UPDATE document set isAnalysed = 'Y',  analyseDate = curdate()+0  \
             WHERE targetID = %s AND url = %s" % \
           ("'"+targetid+"'", "'"+url+"'")
 
