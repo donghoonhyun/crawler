@@ -128,16 +128,15 @@ def save_url(targetid, urls):
 
             # Execute the SQL command
             cursor.execute(sql)
-
-        # Commit changes in the database
-        db.commit()
+            # Commit changes in the database
+            db.commit()
 
     except Exception as e:
         if str(e)[1:5] == '1062':  # Duplicate entry
             print('Targetid ' + targetid + ' has this url(' + url + ') already.')
 
         # Rollback in case there is any error
-        db.rollback()
+        db.rollback()   # TODO: Transaction continue
 
     # Disconnect from database
     db.close()
