@@ -41,6 +41,8 @@ def segmenter(amode, pmode, doc_info, topk, stop_words):
         if pmode == 'P':
             print("Extract Mode:")
             print("/ ".join(seg_list))
+            for x, w in jieba.analyse.textrank(doc, withWeight=True):
+                print('%s %s' % (x, w))
         elif pmode == 'D':
             process(targetid, url, seg_list, stop_words)
 
@@ -91,7 +93,8 @@ def preprocess(doc):
     doc = re.sub('[♥❤♣♡☘☻☟☞☕☉⭐☆★◡◕●○◉◇▽▼▶△▲□■┻┑┍─⑨_Øʖ＾ˆˇ˘˙˵˶ΟΠΣΩ]', ' ', doc)
     doc = re.sub('[ДЗԄ،—↓↑←→ؤأءⅡ∀∇℃•※‿OÔ√①②③ㅠＡＢ😄😡😂⛳🐷💋💖😍😘😱❣🐱💙🙏]', ' ', doc)
     doc = re.sub('[🇨🇸🇺🍂🍃👇🔥👊👏🏻🏽🏾🏿🍎🐴😁àùúāăĭŏŭ💤😴🏆🐍🐜📸🎪📹🌄👍🕛👻😎🙊]', ' ', doc)
-    doc = re.sub('[💕😆😏🙆]', ' ', doc)
+    doc = re.sub('[💕😆😏🙆🍩🍰🎃🎄👀👋👑💃🌳🌴🌵🍇🔪😅😖😗😲😉😊😽😿🌹🎁🎂🎉🌸🚴]', ' ', doc)
+    doc = re.sub('[🍯🎈🌞💘💪🍌👉]', ' ', doc)
     # change all english character to upper character
     doc = doc.lower()
 
