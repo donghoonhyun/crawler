@@ -191,9 +191,11 @@ def save_word(targetid, url, df):
         mark_document(str(targetid), url)
 
     except MySQLdb.MySQLError as sqle:
-        if str(sqle)[1:5] == '1062':  # Duplicate entry
+        try:
+            # if str(sqle)[1:5] == '1062':  # Duplicate entry
             # Rollback in case there is any error
             db.rollback()
+            print(str(sqle))
             print(df)
 
             # Prepare SQL query to INSERT a record into the database
@@ -206,10 +208,32 @@ def save_word(targetid, url, df):
             # Commit changes in the database
             db.commit()
 
+        except UnicodeEncodeError as unie:
+            print(str(unie))
+            # Prepare SQL query to INSERT a record into the database
+            sql = "UPDATE document set isAnalysed = 'E',  analyseDate = curdate()+0  \
+                                        WHERE targetID = %s AND url = %s " % \
+                  ("'" + str(targetid) + "'", "'" + url + "'")
+            # Execute the SQL command
+            cursor.execute(sql)
+
+            # Commit changes in the database
+            db.commit()
+
     except Exception as e:
         print(str(e))
         # Rollback in case there is any error
         db.rollback()
+
+        # Prepare SQL query to INSERT a record into the database
+        sql = "UPDATE document set isAnalysed = 'E',  analyseDate = curdate()+0  \
+                    WHERE targetID = %s AND url = %s " % \
+              ("'" + str(targetid) + "'", "'" + url + "'")
+        # Execute the SQL command
+        cursor.execute(sql)
+
+        # Commit changes in the database
+        db.commit()
 
     # Disconnect from database
     db.close()
