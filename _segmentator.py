@@ -115,6 +115,8 @@ def remove_stop_words(df, stop_words):
             pass
         elif df['word'].loc[i] == ' ':
             pass
+        elif len(df['word'].loc[i]) > 40:
+            pass
         else:
             tmp_dict = {'word': df['word'].loc[i], 'count': df['count'].loc[i]}
             tmp_list.append(tmp_dict)
@@ -123,18 +125,12 @@ def remove_stop_words(df, stop_words):
 
 
 def process(amode, targetid, url, seg_list, stop_words):
-    if amode == 'D':
-        frame = pandas.DataFrame(seg_list, columns=['word'])
-        gframe = frame.groupby(['word']).size().reset_index(name='count')
-        gframe = remove_stop_words(gframe, stop_words)
-        gframe['targetID'] = targetid
-        gframe['url'] = url
-        save_db(amode, targetid, url, gframe)
-    elif amode == 'E':
-        frame = pandas.DataFrame(seg_list, columns=['word'])
-        frame['targetID'] = targetid
-        frame['url'] = url
-        save_db(amode, targetid, url, frame)
+    frame = pandas.DataFrame(seg_list, columns=['word'])
+    gframe = frame.groupby(['word']).size().reset_index(name='count')
+    gframe = remove_stop_words(gframe, stop_words)
+    gframe['targetID'] = targetid
+    gframe['url'] = url
+    save_db(amode, targetid, url, gframe)
 
 
 def save_db(amode, targetid, url, df):
