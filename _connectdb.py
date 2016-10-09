@@ -239,6 +239,45 @@ def save_word(targetid, url, df):
     db.close()
 
 
+def save_keyword(targetid, url, df):
+    db = db_connection()
+
+    # Prepare a cursor object using cursor() method
+    cursor = db.cursor()
+
+    # Prepare SQL query to INSERT a record into the database
+    sql = "INSERT INTO keyword (targetID, url, keyword) \
+            VALUES (%(targetID)s, %(url)s, %(word)s)"
+
+    params = [df.iloc[line, :].to_dict() for line in range(len(df))]
+
+    try:
+        # Execute the SQL command
+        cursor.executemany(sql, params)
+
+        # Commit changes in the database
+        db.commit()
+        mark_document(str(targetid), url)
+
+    except Exception as e:
+        print(str(e))
+        # Rollback in case there is any error
+        db.rollback()
+
+        # Prepare SQL query to INSERT a record into the database
+        sql = "UPDATE document set isAnalysed = 'E',  analyseDate = curdate()+0  \
+                    WHERE targetID = %s AND url = %s " % \
+              ("'" + str(targetid) + "'", "'" + url + "'")
+        # Execute the SQL command
+        cursor.execute(sql)
+
+        # Commit changes in the database
+        db.commit()
+
+    # Disconnect from database
+    db.close()
+
+
 def mark_target(targetid):
     db = db_connection()
 
