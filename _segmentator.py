@@ -25,7 +25,7 @@ def segmenter(amode, pmode, doc_info, topk, stop_words):
             print("Default Mode:")
             print("/ ".join(seg_list))
         elif pmode == 'D':
-            process(targetid, url, seg_list, stop_words)
+            process(amode, targetid, url, seg_list, stop_words)
 
     elif amode == 'S':
         seg_list = jieba.lcut_for_search(doc)
@@ -36,15 +36,15 @@ def segmenter(amode, pmode, doc_info, topk, stop_words):
             print(seg_list)
 
     elif amode == 'E':
-        # jieba.analyse.set_stop_words("./extra_dict/stop_words.txt")
-        seg_list = jieba.analyse.extract_tags(doc, topK=topk, withWeight=False, allowPOS=())
+        jieba.analyse.set_stop_words("./stop_words/stop_words_chinese.txt")
+        seg_list = jieba.analyse.extract_tags(doc, topK=topk, withWeight=False)
         if pmode == 'P':
             print("Extract Mode:")
             print("/ ".join(seg_list))
-            for x, w in jieba.analyse.textrank(doc, withWeight=True):
+            for x, w in jieba.analyse.textrank(doc, topK=topk, withWeight=True):
                 print('%s %s' % (x, w))
         elif pmode == 'D':
-            process(targetid, url, seg_list, stop_words)
+            process(amode, targetid, url, seg_list, stop_words)
 
     elif amode == 'A':
         seg_list = jieba.cut(doc, cut_all=True)
@@ -94,7 +94,7 @@ def preprocess(doc):
     doc = re.sub('[ДЗԄ،—↓↑←→ؤأءⅡ∀∇℃•※‿OÔ√①②③ㅠＡＢ😄😡😂⛳🐷💋💖😍😘😱❣🐱💙🙏]', ' ', doc)
     doc = re.sub('[🇨🇸🇺🍂🍃👇🔥👊👏🏻🏽🏾🏿🍎🐴😁àùúāăĭŏŭ💤😴🏆🐍🐜📸🎪📹🌄👍🕛👻😎🙊]', ' ', doc)
     doc = re.sub('[💕😆😏🙆🍩🍰🎃🎄👀👋👑💃🌳🌴🌵🍇🔪😅😖😗😲😉😊😽😿🌹🎁🎂🎉🌸🚴]', ' ', doc)
-    doc = re.sub('[🍯🎈🌞💘💪🍌👉]', ' ', doc)
+    doc = re.sub('[🍯🎈🌞💘💪🍌👉💧🕊]', ' ', doc)
     # change all english character to upper character
     doc = doc.lower()
 
@@ -122,15 +122,23 @@ def remove_stop_words(df, stop_words):
     return df
 
 
-def process(targetid, url, seg_list, stop_words):
-    frame = pandas.DataFrame(seg_list, columns=['word'])
-    gframe = frame.groupby(['word']).size().reset_index(name='count')
-    gframe = remove_stop_words(gframe, stop_words)
-    gframe['targetID'] = targetid
-    gframe['url'] = url
-    save_db(targetid, url, gframe)
+def process(amode, targetid, url, seg_list, stop_words):
+    if amode == 'D':
+        frame = pandas.DataFrame(seg_list, columns=['word'])
+        gframe = frame.groupby(['word']).size().reset_index(name='count')
+        gframe = remove_stop_words(gframe, stop_words)
+        gframe['targetID'] = targetid
+        gframe['url'] = url
+        save_db(amode, targetid, url, gframe)
+    elif amode == 'E':
+        frame = pandas.DataFrame(seg_list, columns=['word'])
+        frame['targetID'] = targetid
+        frame['url'] = url
+        save_db(amode, targetid, url, frame)
 
 
-def save_db(targetid, url, df):
-    save_word(targetid, url, df)
-
+def save_db(amode, targetid, url, df):
+    if amode == 'D':
+        save_word(targetid, url, df)
+    elif amode == 'E':
+        save_keyword(targetid, url, df)
