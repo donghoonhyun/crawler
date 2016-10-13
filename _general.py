@@ -61,5 +61,7 @@ def date_formatter(date):
     dt = datetime.datetime.combine(d, t)
     return dt.strftime('%Y-%m-%d %H:%M:%S')
 
-# print(date_formatter('2016-09-20 23:11:52'))
+# wdate = date_formatter('2016-09-20 23:11:52')
+# print(wdate[0:10])
+# print(wdate[11:19])
 # print(date_formatter('2016-09-20　来源: 央广网'))
