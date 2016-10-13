@@ -15,7 +15,7 @@ def init_target_list():
     cursor = db.cursor()
 
     # Prepare SQL query to INSERT a record into the database
-    sql = "UPDATE target SET needVisit = 'Y' WHERE needVisit = 'N'"
+    sql = "UPDATE targets SET needVisit = 'Y' WHERE needVisit = 'N'"
 
     try:
         # Execute the SQL command
@@ -40,7 +40,7 @@ def get_target_list():
     cursor = db.cursor()
 
     # Prepare SQL query to INSERT a record into the database
-    sql = "SELECT targetID, targetNameASCII FROM target WHERE needVisit = 'Y' ORDER BY targetID"
+    sql = "SELECT targetID, targetNameASCII FROM targets WHERE needVisit = 'Y' ORDER BY targetID"
 
     try:
         # Execute the SQL command
@@ -68,7 +68,7 @@ def get_url_list():
     cursor = db.cursor()
 
     # Prepare SQL query to INSERT a record into the database
-    sql = "SELECT targetID, url FROM url WHERE isVisited = 'N' ORDER BY url"
+    sql = "SELECT targetID, url FROM urls WHERE isVisited = 'N' ORDER BY url"
 
     try:
         # Execute the SQL command
@@ -96,7 +96,7 @@ def get_document():
     cursor = db.cursor()
 
     # Prepare SQL query to INSERT a record into the database
-    sql = "SELECT targetID, url, concat(title, article) doc FROM document WHERE isAnalysed = 'N' ORDER BY targetID"
+    sql = "SELECT targetID, url, concat(title, article) doc FROM documents WHERE isAnalysed = 'N' ORDER BY targetID"
 
     try:
         # Execute the SQL command
@@ -122,7 +122,7 @@ def save_url(targetid, urls):
     try:
         for url in urls:
             # Prepare SQL query to INSERT a record into the database
-            sql = "INSERT INTO url (targetID, url, collectDate) \
+            sql = "INSERT INTO urls (targetID, url, collectDate) \
                     VALUES (%s, %s, curdate()+0)" % \
                   ("'"+str(targetid)+"'", "'"+url+"'")
 
@@ -149,7 +149,7 @@ def save_article(targetid, url, title, article, fromsite, wdate, writer, cnt):
     cursor = db.cursor()
 
     # Prepare SQL query to INSERT a record into the database
-    sql = "INSERT INTO document (targetID, url, title, article, fromSite, writeDate, writer, viewCount) \
+    sql = "INSERT INTO documents (targetID, url, title, article, fromSite, writeDate, writer, viewCount) \
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)" % \
           ("'"+targetid+"'", "'"+url+"'", "'"+title+"'", "'"+article+"'", "'"+fromsite+"'", "'"+wdate+"'", "'"+writer
            + "'", "'"+cnt+"'")
@@ -177,7 +177,7 @@ def save_word(targetid, url, df):
     cursor = db.cursor()
 
     # Prepare SQL query to INSERT a record into the database
-    sql = "INSERT INTO word (targetID, url, word, cnt) \
+    sql = "INSERT INTO words (targetID, url, word, cnt) \
             VALUES (%(targetID)s, %(url)s, %(word)s, %(count)s)"
 
     params = [df.iloc[line, :].to_dict() for line in range(len(df))]
@@ -199,7 +199,7 @@ def save_word(targetid, url, df):
             print(df)
 
             # Prepare SQL query to INSERT a record into the database
-            sql = "UPDATE document set isAnalysed = 'E',  analyseDate = curdate()+0  \
+            sql = "UPDATE documents set isAnalysed = 'E',  analyseDate = curdate()+0  \
                         WHERE targetID = %s AND url = %s " % \
                   ("'" + str(targetid) + "'", "'" + url + "'")
             # Execute the SQL command
@@ -211,7 +211,7 @@ def save_word(targetid, url, df):
         except UnicodeEncodeError as unie:
             print(str(unie))
             # Prepare SQL query to INSERT a record into the database
-            sql = "UPDATE document set isAnalysed = 'E',  analyseDate = curdate()+0  \
+            sql = "UPDATE documents set isAnalysed = 'E',  analyseDate = curdate()+0  \
                                         WHERE targetID = %s AND url = %s " % \
                   ("'" + str(targetid) + "'", "'" + url + "'")
             # Execute the SQL command
@@ -226,7 +226,7 @@ def save_word(targetid, url, df):
         db.rollback()
 
         # Prepare SQL query to INSERT a record into the database
-        sql = "UPDATE document set isAnalysed = 'E',  analyseDate = curdate()+0  \
+        sql = "UPDATE documents set isAnalysed = 'E',  analyseDate = curdate()+0  \
                     WHERE targetID = %s AND url = %s " % \
               ("'" + str(targetid) + "'", "'" + url + "'")
         # Execute the SQL command
@@ -246,7 +246,7 @@ def save_keyword(targetid, url, df):
     cursor = db.cursor()
 
     # Prepare SQL query to INSERT a record into the database
-    sql = "INSERT INTO keyword (targetID, url, keyword) \
+    sql = "INSERT INTO keywords (targetID, url, keyword) \
             VALUES (%(targetID)s, %(url)s, %(word)s)"
 
     params = [df.iloc[line, :].to_dict() for line in range(len(df))]
@@ -267,7 +267,7 @@ def save_keyword(targetid, url, df):
         print(df)
 
         # Prepare SQL query to INSERT a record into the database
-        sql = "UPDATE document set isAnalysed = 'E',  analyseDate = curdate()+0  \
+        sql = "UPDATE documents set isAnalysed = 'E',  analyseDate = curdate()+0  \
                     WHERE targetID = %s AND url = %s " % \
               ("'" + str(targetid) + "'", "'" + url + "'")
         # Execute the SQL command
@@ -282,7 +282,7 @@ def save_keyword(targetid, url, df):
         db.rollback()
 
         # Prepare SQL query to INSERT a record into the database
-        sql = "UPDATE document set isAnalysed = 'E',  analyseDate = curdate()+0  \
+        sql = "UPDATE documents set isAnalysed = 'E',  analyseDate = curdate()+0  \
                     WHERE targetID = %s AND url = %s " % \
               ("'" + str(targetid) + "'", "'" + url + "'")
         # Execute the SQL command
@@ -302,7 +302,7 @@ def mark_target(targetid):
     cursor = db.cursor()
 
     # Prepare SQL query to INSERT a record into the database
-    sql = "UPDATE target set needVisit = 'N',  visitDate = curdate()+0 \
+    sql = "UPDATE targets set needVisit = 'N',  visitDate = curdate()+0 \
             WHERE targetID = %s" % \
           ("'"+targetid+"'")
 
@@ -329,7 +329,7 @@ def mark_url(targetid, url):
     cursor = db.cursor()
 
     # Prepare SQL query to INSERT a record into the database
-    sql = "UPDATE url set isVisited = 'Y', visitDate = curdate()+0 \
+    sql = "UPDATE urls set isVisited = 'Y', visitDate = curdate()+0 \
             WHERE targetID = %s AND url = %s" % \
           ("'"+targetid+"'", "'"+url+"'")
 
@@ -356,7 +356,7 @@ def mark_document(targetid, url):
     cursor = db.cursor()
 
     # Prepare SQL query to INSERT a record into the database
-    sql = "UPDATE document set isAnalysed = 'Y',  analyseDate = curdate()+0  \
+    sql = "UPDATE documents set isAnalysed = 'Y',  analyseDate = curdate()+0  \
             WHERE targetID = %s AND url = %s" % \
           ("'"+targetid+"'", "'"+url+"'")
 
