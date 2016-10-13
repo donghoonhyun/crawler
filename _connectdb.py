@@ -149,10 +149,10 @@ def save_article(targetid, url, title, article, fromsite, wdate, writer, cnt):
     cursor = db.cursor()
 
     # Prepare SQL query to INSERT a record into the database
-    sql = "INSERT INTO documents (targetID, url, title, article, fromSite, writeDate, writer, viewCount) \
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)" % \
-          ("'"+targetid+"'", "'"+url+"'", "'"+title+"'", "'"+article+"'", "'"+fromsite+"'", "'"+wdate+"'", "'"+writer
-           + "'", "'"+cnt+"'")
+    sql = "INSERT INTO documents (targetID, url, title, article, fromSite, writeDate, writeDateTime, writer, viewCount) \
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)" % \
+          ("'" + targetid + "'", "'" + url + "'", "'" + title + "'", "'" + article + "'", "'" + fromsite
+           + "'", "'" + wdate[0:10] + "'", "'" + wdate[11:19] + "'", "'" + writer + "'", "'"+cnt+"'")
 
     try:
         # Execute the SQL command
