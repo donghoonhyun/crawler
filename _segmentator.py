@@ -99,10 +99,29 @@ def preprocess(doc):
     doc = doc.lower()
 
     # jieba word suggest
-    jieba.suggest_freq('exo', True)
-    jieba.suggest_freq('dancing king', True)
+    jieba.suggest_freq('EXO', True)
+    jieba.suggest_freq('dancing-king', True)
+    jieba.suggest_freq('running-man', True)
+    jieba.suggest_freq('red-velvet', True)
+    jieba.suggest_freq('TFBOYS', True)
     jieba.suggest_freq('无限挑战', True)
     jieba.suggest_freq('刘在石', True)
+    jieba.suggest_freq('防弹少年团', True)
+    jieba.suggest_freq('太阳的后裔', True)
+    jieba.suggest_freq('李钟硕', True)
+    jieba.suggest_freq('李敏镐', True)
+    jieba.suggest_freq('朴宝剑', True)
+    jieba.suggest_freq('云画的月光', True)
+    jieba.suggest_freq('黄致列', True)
+    jieba.suggest_freq('刘诗诗', True)
+    jieba.suggest_freq('霍建华', True)
+    jieba.suggest_freq('迪丽热巴', True)
+    jieba.suggest_freq('林更新', True)
+    jieba.suggest_freq('马天宇', True)
+    jieba.suggest_freq('黄景瑜', True)
+    jieba.suggest_freq('徐海乔', True)
+    jieba.suggest_freq('华晨宇', True)
+    jieba.suggest_freq('X玖少年团', True)
 
     return doc
 
