@@ -96,7 +96,7 @@ def get_document():
     cursor = db.cursor()
 
     # Prepare SQL query to INSERT a record into the database
-    sql = "SELECT targetID, url, concat(title, article) doc FROM documents WHERE isAnalysed = 'N' ORDER BY targetID"
+    sql = "SELECT targetID, url, concat(title, content) doc FROM documents WHERE isAnalysed = 'N' ORDER BY targetID"
 
     try:
         # Execute the SQL command
@@ -149,7 +149,7 @@ def save_article(targetid, url, title, article, fromsite, wdate, writer, cnt):
     cursor = db.cursor()
 
     # Prepare SQL query to INSERT a record into the database
-    sql = "INSERT INTO documents (targetID, url, title, article, fromSite, writeDate, writeDateTime, writer, viewCount) \
+    sql = "INSERT INTO documents (targetID, url, title, content, fromSite, writeDate, writeDateTime, writer, viewCount) \
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)" % \
           ("'" + targetid + "'", "'" + url + "'", "'" + title + "'", "'" + article + "'", "'" + fromsite
            + "'", "'" + wdate[0:10] + "'", "'" + wdate[11:19] + "'", "'" + writer + "'", "'"+cnt+"'")
