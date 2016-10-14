@@ -15,7 +15,7 @@ def init_target_list():
     cursor = db.cursor()
 
     # Prepare SQL query to INSERT a record into the database
-    sql = "UPDATE targets SET needVisit = 'Y' WHERE needVisit = 'N'"
+    sql = "UPDATE targets SET needVisit = 'Y' WHERE needVisit = 'N' AND useFlag = 'Y' "
 
     try:
         # Execute the SQL command
@@ -40,7 +40,7 @@ def get_target_list():
     cursor = db.cursor()
 
     # Prepare SQL query to INSERT a record into the database
-    sql = "SELECT targetID, targetNameASCII FROM targets WHERE needVisit = 'Y' ORDER BY targetID"
+    sql = "SELECT targetID, targetNameASCII FROM targets WHERE needVisit = 'Y' AND useFlag = 'Y' ORDER BY targetID"
 
     try:
         # Execute the SQL command
